@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/django,pycharm
+# Created by https://www.gitignore.io/api/django
 
 ### Django ###
 *.log
@@ -16,4 +16,4 @@ media
 .idea
 ElectionsApp.iml
 
-# End of https://www.gitignore.io/api/django,pycharm
+# End of https://www.gitignore.io/api/django

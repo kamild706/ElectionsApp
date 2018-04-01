@@ -1,0 +1,15 @@
+<p>Witaj w Centrum Wyborczym!</p>
+
+{% if active_elections %}
+    <p>Oto lista dostępnych wyborów:</p>
+    <ul>
+        {% for election in active_elections %}
+            <li>{{ election.description }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aktualnie nie ma żadnych wyborów.</p>
+{% endif %}
+
+
+<p>Zaloguj się aby wziąć udział</p>

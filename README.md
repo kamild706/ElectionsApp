@@ -1,2 +1,2 @@
 # ElectionsApp
-Django 3.0.2
+Django 2.0.3
