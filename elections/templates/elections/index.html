@@ -1,15 +1,26 @@
-<p>Witaj w Centrum Wyborczym!</p>
-
-{% if active_elections %}
-    <p>Oto lista dostępnych wyborów:</p>
-    <ul>
-        {% for election in active_elections %}
-            <li>{{ election.description }}</li>
-        {% endfor %}
-    </ul>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+    <p>Witaj, {{ request.user.username }}!</p>
+    {% if active_elections %}
+        <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
+        <ul>
+            {% for election in active_elections %}
+                <li>{{ election.description }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aktualnie nie ma żadnych wyborów.</p>
+    {% endif %}
+    <p>Aby wylogować się <a href="{% url 'elections:logout' %}">kliknij tutaj</a></p>
 {% else %}
-    <p>Aktualnie nie ma żadnych wyborów.</p>
+    <p>Witaj w Centrum Wyborczym!</p>
+    <p>Dostęp do strony możliwy jest po zalogowaniu</p>
+    <p><a href="{% url 'elections:login' %}">Przejdź do strony logowania</a></p>
 {% endif %}
-
-
-<p>Zaloguj się aby wziąć udział</p>
+</body>

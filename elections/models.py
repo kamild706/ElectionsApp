@@ -12,12 +12,16 @@ class Candidate(models.Model):
 
 
 class Election(models.Model):
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=150)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    votes_per_user = models.IntegerField()
-    voters = models.ManyToManyField(User, blank=True)
+    votes_per_voter = models.IntegerField()
+    voters = models.ManyToManyField(User, through='VoterInElection',)
     candidates = models.ManyToManyField(Candidate, through='CandidateInElection',)
+
+    def candidates_number(self):
+        return self.candidates.count()
+    candidates_number.short_description = 'Number of candidates'
 
     def is_active(self):
         return self.start_date <= timezone.now() <= self.end_date
@@ -26,9 +30,10 @@ class Election(models.Model):
         return self.description
 
 
-class ElectionAccess(models.Model):
-    election = models.OneToOneField(Election, on_delete=models.CASCADE, default=None)
-    users = models.ManyToManyField(User)
+class VoterInElection(models.Model):
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)
+    voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='elections')
+    voted = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.election)

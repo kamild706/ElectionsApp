@@ -18,4 +18,8 @@ class IndexView(generic.ListView):
     context_object_name = 'active_elections'
 
     def get_queryset(self):
-        return Election.objects.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now())
+        if self.request.user.is_authenticated:
+            return Election.objects.filter(start_date__lte=timezone.now(),
+                                           end_date__gte=timezone.now(),
+                                           voterinelection__voter=self.request.user,
+                                           voterinelection__voted=False)
