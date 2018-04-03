@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Candidate, CandidateInElection, Election, VoterInElection
+from .models import Candidate, Candidacy, Election, Participation
 
 
 class ElectionAdmin(admin.ModelAdmin):
@@ -12,17 +12,17 @@ class CandidateAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name')
 
 
-class CandidateInElectionAdmin(admin.ModelAdmin):
+class CandidacyAdmin(admin.ModelAdmin):
     list_display = ('candidate', 'election', 'votes')
     exclude = ('votes',)
 
 
-class VoterInElectionAdmin(admin.ModelAdmin):
+class ParticipationAdmin(admin.ModelAdmin):
     list_display = ('voter', 'election', 'voted')
     exclude = ('voted',)
 
 
 admin.site.register(Candidate, CandidateAdmin)
-admin.site.register(CandidateInElection, CandidateInElectionAdmin)
+admin.site.register(Candidacy, CandidacyAdmin)
 admin.site.register(Election, ElectionAdmin)
-admin.site.register(VoterInElection, VoterInElectionAdmin)
+admin.site.register(Participation, ParticipationAdmin)

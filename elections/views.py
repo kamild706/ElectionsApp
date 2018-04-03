@@ -1,16 +1,10 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.utils import timezone
 from django.views import generic
+from django.shortcuts import render
 
-from elections.models import Election
-
-
-# def index(request):
-#     if request.user.is_authenticated:
-#         return HttpResponse("You are in")
-#     else:
-#         return HttpResponse("You must log in")
+from elections.models import Election, Participation
 
 
 class IndexView(generic.ListView):
@@ -21,5 +15,26 @@ class IndexView(generic.ListView):
         if self.request.user.is_authenticated:
             return Election.objects.filter(start_date__lte=timezone.now(),
                                            end_date__gte=timezone.now(),
-                                           voterinelection__voter=self.request.user,
-                                           voterinelection__voted=False)
+                                           voters=self.request.user,
+                                           participation__voted=False)
+
+
+@login_required(login_url='/login')
+def detail(request, election_id):
+    def reject_access():
+        return Http404("Wskazane wybory nie istnieją lub nie masz do nich dostępu")
+
+    try:
+        election = Election.objects.get(pk=election_id)
+    except Election.DoesNotExist:
+        raise reject_access()
+
+    if not election.is_active():
+        raise reject_access()
+    try:
+        participation = election.participation_set.get(voter=request.user)
+    except Participation.DoesNotExist:
+        raise reject_access()
+    if participation.voted:
+        raise reject_access()
+    return render(request, 'elections/election_detail.html', {'election': election})

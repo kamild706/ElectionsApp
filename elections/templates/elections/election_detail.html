@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Szczegóły Wyborów</title>
+</head>
+<body>
+<h1>{{ election.description }}</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<p>W tych wyborach możesz poprzeć {{ election.votes_per_voter }} kandydatów</p>
+<form action="" method="post">
+    {% csrf_token %}
+    {% for candidate in election.candidates.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ candidate.id }}"/>
+        <label for="choice{{ forloop.counter }}">{{ candidate.get_full_name }}</label>
+    {% endfor %}
+    <input type="submit" value="Zagłosuj"/>
+</form>
+</body>
+</html>

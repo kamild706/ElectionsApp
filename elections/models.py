@@ -7,6 +7,9 @@ class Candidate(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 
+    def get_full_name(self):
+        return self.first_name + " " + self.last_name
+
     def __str__(self):
         return self.first_name + " " + self.last_name
 
@@ -16,8 +19,8 @@ class Election(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     votes_per_voter = models.IntegerField()
-    voters = models.ManyToManyField(User, through='VoterInElection',)
-    candidates = models.ManyToManyField(Candidate, through='CandidateInElection',)
+    voters = models.ManyToManyField(User, through='Participation')
+    candidates = models.ManyToManyField(Candidate, through='Candidacy')
 
     def candidates_number(self):
         return self.candidates.count()
@@ -30,16 +33,16 @@ class Election(models.Model):
         return self.description
 
 
-class VoterInElection(models.Model):
+class Participation(models.Model):
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
-    voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='elections')
+    voter = models.ForeignKey(User, on_delete=models.CASCADE)
     voted = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.election)
 
 
-class CandidateInElection(models.Model):
+class Candidacy(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
     votes = models.IntegerField(default=0)
