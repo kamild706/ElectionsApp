@@ -6,15 +6,20 @@
 </head>
 <body>
 <h1>{{ election.description }}</h1>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if form.non_field_errors %}<p><strong>{{ form.non_field_errors }}</strong></p>{% endif %}
+{% if form.errors %}<p><strong>{{ form.errors }}</strong></p>{% endif %}
 <p>W tych wyborach możesz poprzeć {{ election.votes_per_voter }} kandydatów</p>
-<form action="" method="post">
+<form action="#" method="post">
     {% csrf_token %}
-    {% for candidate in election.candidates.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ candidate.id }}"/>
-        <label for="choice{{ forloop.counter }}">{{ candidate.get_full_name }}</label>
+    {% for choice in form.candidates %}
+        <div class="choice">
+            <label>
+                {{ choice.tag }} {{ choice.choice_label }}
+            </label>
+        </div>
     {% endfor %}
-    <input type="submit" value="Zagłosuj"/>
+
+    <input type="submit" value="Submit">
 </form>
 </body>
 </html>

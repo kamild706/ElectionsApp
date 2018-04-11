@@ -11,7 +11,7 @@
         <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
         <ul>
             {% for election in active_elections %}
-                <li>{{ election.description }}</li>
+                <li><a href="{% url 'elections:detail' election.id %}">{{ election.description }}</a></li>
             {% endfor %}
         </ul>
     {% else %}
