@@ -38,6 +38,9 @@ class Participation(models.Model):
     voter = models.ForeignKey(User, on_delete=models.CASCADE)
     voted = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = ['election', 'voter']
+
     def __str__(self):
         return str(self.election)
 
@@ -46,6 +49,9 @@ class Candidacy(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
     votes = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['candidate', 'election']
 
     def __str__(self):
         return str(self.election) + " " + str(self.candidate) + " " + str(self.votes)
