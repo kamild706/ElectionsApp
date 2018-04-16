@@ -1,26 +1,70 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <title>Strona główna</title>
+    <link rel="stylesheet" href="{% static 'elections/style.css' %}">
 </head>
 <body>
 {% if request.user.is_authenticated %}
-    <p>Witaj, {{ request.user.username }}!</p>
-    {% if active_elections %}
-        <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
-        <ul>
-            {% for election in active_elections %}
-                <li><a href="{% url 'elections:detail' election.id %}">{{ election.description }}</a></li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aktualnie nie ma żadnych wyborów.</p>
-    {% endif %}
-    <p>Aby wylogować się <a href="{% url 'elections:logout' %}">kliknij tutaj</a></p>
+    <header>
+        <div class="left">Internetowe Centrum Wyborcze</div>
+        <div class="right">
+            <div class="date">{% now "l, j E Y" %}</div>
+            <div class="profile">
+                <div>Witaj, {{ request.user.username }}!</div>
+                <div><a href="{% url 'elections:logout' %}">Wyloguj się</a></div>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% if active_elections %}
+            <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
+            <table class="elections">
+                <thead>
+                <tr>
+                    <th class="desc">
+                        Opis
+                    </th>
+                    <th class="date-start">
+                        Data rozpoczęcia
+                    </th>
+                    <th class="date-end">
+                        Data zakończenia
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for election in active_elections %}
+                <tr onclick="window.location='{% url 'elections:detail' election.id %}';">
+                    <td>{{ election.description }}</td>
+                    <td>{{ election.start_date }}</td>
+                    <td>{{ election.end_date }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-error big-margin">
+                <strong>Niestety!</strong> W tym momencie nie ma wyborów w których mógłbyś wziąć udział.
+            </div>
+        {% endif %}
+    </main>
 {% else %}
-    <p>Witaj w Centrum Wyborczym!</p>
-    <p>Dostęp do strony możliwy jest po zalogowaniu</p>
-    <p><a href="{% url 'elections:login' %}">Przejdź do strony logowania</a></p>
+    <header>
+        <div class="left">Internetowe Centrum Wyborcze</div>
+        <div class="right">
+            <div class="date">Poniedziałek, 16 kwietnia 2018</div>
+        </div>
+    </header>
+    <main>
+        <div class="alert alert-error big-margin">
+            <strong>Brak dostępu!</strong> Aby wziąć udział w wyborach musisz się zalogować.<br>
+            <a href="{% url 'elections:login' %}">Kliknij aby przejść do strony logowania</a>
+        </div>
+    </main>
 {% endif %}
 </body>
+</html>

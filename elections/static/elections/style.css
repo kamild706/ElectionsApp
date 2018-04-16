@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    background-color: white;
+}
+
+.left {
+    margin-top: 33px;
+    font-size: 25px;
+}
+
+.right {
+    margin-top: 20px;
+    float: right;
+}
+
+.profile {
+    float: right;
+    margin-top: 5px;
+}
+
+header {
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+    height: 100px;
+    background-color: #4A8ED3;
+}
+
+.left, .right {
+    display: inline-block;
+}
+
+main {
+    margin: 10px;
+}
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 18px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 3px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #c09853;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    border-color: #FF6863;
+    color: #b94a48;
+}
+
+.big-margin {
+    margin-top: 150px;
+}
+
+header div a {
+    color: white;
+    text-decoration: none;
+}
+
+.elections th {
+    text-align: left;
+}
+
+.elections td {
+    border-top: 1px solid grey;
+}
+
+.elections tr {
+    height: 30px;
+}
+
+.elections tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.elections .desc {
+    width: 450px;
+}
+
+.elections .date-start, .date-end {
+    width: 250px;
+}
