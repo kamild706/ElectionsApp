@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <link rel="stylesheet" href="{% static 'elections/style.css' %}">
+</head>
+<body>
+<header>
+    <div class="left">Internetowe Centrum Wyborcze</div>
+    <div class="right">
+        <div class="date">{% now "l, j E Y" %}</div>
+        {% if request.user.is_authenticated %}
+            <div class="profile">
+                <div>Witaj, {{ request.user.username }}!</div>
+                <div><a href="{% url 'elections:logout' %}">Wyloguj się</a></div>
+            </div>
+        {% endif %}
+    </div>
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+</body>
+</html>
