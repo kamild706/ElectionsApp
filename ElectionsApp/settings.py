@@ -25,7 +25,7 @@ SECRET_KEY = 'ug1z1*orykj=v^45+yw_1mi4tc5gyi624d1i#tjx9ye4!&w4n='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['website-awdre34.c9users.io', 'localhost']
 
 
 # Application definition
