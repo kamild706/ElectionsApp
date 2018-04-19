@@ -95,3 +95,44 @@ table {
 .elections .date-start, .date-end {
     width: 250px;
 }
+
+.choice:hover {
+    background-color: #e9ecef;
+}
+
+.choice {
+    width: 370px;
+    height: 44px;
+    border-top: 1px solid black;
+   /* border-left: 1px solid black;
+    border-right: 1px solid black;*/
+    display:flex;
+    align-items:center;
+}
+
+
+.choice div {
+    margin-left: 10px;
+}
+
+.choice label {
+    margin-left: 50px;
+}
+
+.choiceForm {
+    margin-top: 40px;
+}
+
+.green-button {
+    color: white;
+    width: 80px;
+    height: 38px;
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    border-radius: 3px;
+}
+
+.right-aligned {
+    margin-top: 20px;
+    margin-left: 290px;
+}

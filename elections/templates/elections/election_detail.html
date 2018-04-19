@@ -1,25 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Szczegóły Wyborów</title>
-</head>
-<body>
+{% extends 'elections/base.html' %}
+
+{% block content %}
+
 <h1>{{ election.description }}</h1>
 {% if form.non_field_errors %}<p><strong>{{ form.non_field_errors }}</strong></p>{% endif %}
 {% if form.errors %}<p><strong>{{ form.errors }}</strong></p>{% endif %}
 <p>W tych wyborach możesz poprzeć {{ election.votes_per_voter }} kandydatów</p>
-<form action="#" method="post">
+<form class="choiceForm" action="#" method="post">
     {% csrf_token %}
     {% for choice in form.candidates %}
+
         <div class="choice">
-            <label>
-                {{ choice.tag }} {{ choice.choice_label }}
+            <div>
+                {{ choice.tag }}
+            <label for="{{ choice.id_for_label }}">
+                {{ choice.choice_label }}
             </label>
+            </div>
         </div>
     {% endfor %}
 
-    <input type="submit" value="Submit">
+    <input type="submit" class="green-button right-aligned" value="Zagłosuj">
 </form>
 </body>
 </html>
+
+{% endblock %}
