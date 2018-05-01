@@ -1,0 +1,11 @@
+{% extends 'elections/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="alert alert-info big-margin">
+        <strong>Wylogowano!</strong> Zostałeś pomyślnie wylogowany.<br>
+        Za <span id="time">10</span> sekund powrócisz na <a href="{% url 'elections:index' %}">stronę główną.</a>
+    </div>
+
+    <script src="{% static 'elections/redirect.js' %}"></script>
+{% endblock %}

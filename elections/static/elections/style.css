@@ -58,6 +58,12 @@ main {
     color: #b94a48;
 }
 
+.alert-info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #3a87ad;
+}
+
 .big-margin {
     margin-top: 150px;
 }
@@ -100,6 +106,10 @@ table {
     background-color: #e9ecef;
 }
 
+.choice input {
+    visibility: hidden;
+}
+
 .choice {
     width: 370px;
     height: 44px;
@@ -135,4 +145,13 @@ table {
 .right-aligned {
     margin-top: 20px;
     margin-left: 290px;
+}
+
+.login-form div input {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.login-form div label {
+    display: block;
 }
