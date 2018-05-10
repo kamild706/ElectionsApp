@@ -1,15 +1,18 @@
+/* global $ */
+let color = "#cacdd1";
+
 $('.choice').each(function () {
     let checkbox = $(this).find($('input'));
     let isChecked = checkbox.is(':checked');
 
-    $(this).css('background-color', isChecked ? '#e9ecef' : 'inherit');
+    $(this).css('background-color', isChecked ? color : 'inherit');
 });
 
 $('.choice').click(function () {
     let checkbox = $(this).find($('input'));
     let isChecked = checkbox.is(':checked');
 
-    $(this).css('background-color', !isChecked ? '#e9ecef' : 'inherit');
+    $(this).css('background-color', !isChecked ? color : 'inherit');
     checkbox.prop('checked', !isChecked);
 });
 

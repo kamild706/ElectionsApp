@@ -91,7 +91,7 @@ table {
 }
 
 .elections tbody tr:hover {
-    background-color: #e9ecef;
+    background-color: #cacdd1;
 }
 
 .elections .desc {
@@ -103,7 +103,7 @@ table {
 }
 
 .choice:hover {
-    background-color: #e9ecef;
+    background-color: #cacdd1 !important;
 }
 
 .choice input {
@@ -114,8 +114,6 @@ table {
     width: 370px;
     height: 44px;
     border-top: 1px solid black;
-   /* border-left: 1px solid black;
-    border-right: 1px solid black;*/
     display:flex;
     align-items:center;
 }

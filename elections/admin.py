@@ -3,9 +3,20 @@ from django.contrib import admin
 from .models import Candidate, Candidacy, Election, Participation
 
 
+class CandidacyInline(admin.TabularInline):
+    model = Candidacy
+    extra = 1
+    exclude = ('votes',)
+    
+    
+class ParticipationInline(admin.TabularInline):
+    model = Participation
+    extra = 1
+    exclude = ('voted',)
+    
 class ElectionAdmin(admin.ModelAdmin):
     list_display = ('description', 'start_date', 'end_date', 'candidates_number')
-    exclude = ('voters',)
+    inlines = (CandidacyInline, ParticipationInline)
 
 
 class CandidateAdmin(admin.ModelAdmin):
