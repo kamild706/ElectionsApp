@@ -13,6 +13,10 @@ class Candidate(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
+    class Meta:
+        verbose_name = "Kandydat"
+        verbose_name_plural = "Kandydaci"
+
 
 class Election(models.Model):
     description = models.CharField(max_length=150)
@@ -31,6 +35,10 @@ class Election(models.Model):
 
     def __str__(self):
         return self.description
+
+    class Meta:
+        verbose_name = "Wybory"
+        verbose_name_plural = "Wybory"
 
 
 class Participation(models.Model):
