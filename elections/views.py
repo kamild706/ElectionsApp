@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.db.models import F
 from django.http import Http404
 from django.utils import timezone
 from django.views import generic
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from elections.forms import VoteForm
+from elections.forms import VoteForm, SignUpForm
 from elections.models import Election, Participation
 
 
@@ -59,3 +60,18 @@ def detail(request, election_id):
         'form': form,
         'election': election
     })
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('/')
+    else:
+        form = SignUpForm()
+    return render(request, 'elections/signup.html', {'form': form})

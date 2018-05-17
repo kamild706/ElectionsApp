@@ -14,12 +14,15 @@
 </head>
 <body>
 <header>
-    <div class="left">Internetowe Centrum Wyborcze</div>
+    <div class="left"><a href="{% url 'elections:index' %}">Internetowe Centrum Wyborcze</a></div>
     <div class="right">
         <div class="date">{% now "l, j E Y" %}</div>
         {% if request.user.is_authenticated %}
             <div class="profile">
                 <div>Witaj, {{ request.user.username }}!</div>
+                {% if request.user.is_staff %}
+                    <div><a href="admin/">Panel admina</a></div>
+                {% endif %}
                 <div><a href="{% url 'elections:logout' %}">Wyloguj się</a></div>
             </div>
         {% endif %}
