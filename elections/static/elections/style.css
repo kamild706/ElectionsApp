@@ -64,6 +64,12 @@ main {
     color: #3a87ad;
 }
 
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}
+
 .big-margin {
     margin-top: 150px;
 }
@@ -117,7 +123,6 @@ table {
     display:flex;
     align-items:center;
 }
-
 
 .choice div {
     margin-left: 10px;
