@@ -7,8 +7,8 @@ class CandidacyInline(admin.TabularInline):
     model = Candidacy
     extra = 1
     exclude = ('votes',)
-    
-    
+
+
 class ParticipationInline(admin.TabularInline):
     model = Participation
     extra = 1

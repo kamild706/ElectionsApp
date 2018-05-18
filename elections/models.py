@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from django.core.validators import MinValueValidator
 
 class Candidate(models.Model):
     first_name = models.CharField(max_length=30)
@@ -22,7 +22,7 @@ class Election(models.Model):
     description = models.CharField(max_length=150)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    votes_per_voter = models.IntegerField()
+    votes_per_voter = models.IntegerField(validators=[MinValueValidator(1)])
     voters = models.ManyToManyField(User, through='Participation')
     candidates = models.ManyToManyField(Candidate, through='Candidacy')
 
