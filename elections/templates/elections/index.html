@@ -2,35 +2,69 @@
 
 {% block content %}
     {% if request.user.is_authenticated %}
-        {% if active_elections %}
-            <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
-            <table class="elections">
-                <thead>
-                <tr>
-                    <th class="desc">
-                        Opis
-                    </th>
-                    <th class="date-start">
-                        Data rozpoczęcia
-                    </th>
-                    <th class="date-end">
-                        Data zakończenia
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for election in active_elections %}
-                    <tr onclick="window.location='{% url 'elections:detail' election.id %}';">
-                        <td>{{ election.description }}</td>
-                        <td>{{ election.start_date }}</td>
-                        <td>{{ election.end_date }}</td>
+        {% if active_elections or active_questionnaires %}
+
+            {% if active_elections %}
+                <p>Oto lista aktualnie trwających wyborów w których możesz wziąć udział:</p>
+                <table class="elections">
+                    <thead>
+                    <tr>
+                        <th class="desc">
+                            Opis
+                        </th>
+                        <th class="date-start">
+                            Data rozpoczęcia
+                        </th>
+                        <th class="date-end">
+                            Data zakończenia
+                        </th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for election in active_elections %}
+                        <tr onclick="window.location='{% url 'elections:electionDetail' election.id %}';">
+                            <td>{{ election.description }}</td>
+                            <td>{{ election.start_date }}</td>
+                            <td>{{ election.end_date }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if active_questionnaires %}
+                <div class="vertical-offset">
+                    <p>Oto lista aktualnie dostępnych pytań w których możesz odpowiedzieć:</p>
+                    <table class="elections">
+                        <thead>
+                        <tr>
+                            <th class="desc">
+                                Opis
+                            </th>
+                            <th class="date-start">
+                                Data rozpoczęcia
+                            </th>
+                            <th class="date-end">
+                                Data zakończenia
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for election in active_questionnaires %}
+                            <tr onclick="window.location='{% url 'elections:questionnaireDetail' election.id %}';">
+                                <td>{{ election.description }}</td>
+                                <td>{{ election.start_date }}</td>
+                                <td>{{ election.end_date }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
         {% else %}
             <div class="alert alert-error big-margin">
-                <strong>Niestety!</strong> W tym momencie nie ma wyborów w których mógłbyś wziąć udział.
+                <strong>Niestety!</strong> W tym momencie nie ma wyborów ani głosowań w których mógłbyś wziąć udział.
             </div>
         {% endif %}
     {% else %}

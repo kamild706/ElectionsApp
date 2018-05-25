@@ -6,8 +6,8 @@ from django.utils import timezone
 from django.views import generic
 from django.shortcuts import render, redirect
 
-from elections.forms import VoteForm, SignUpForm
-from elections.models import Election, Participation
+from elections.forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
+from elections.models import Election, Participation, Questionnaire
 
 
 class IndexView(generic.ListView):
@@ -22,8 +22,25 @@ class IndexView(generic.ListView):
                                            participation__voted=False)
 
 
+def index(request):
+    elections = Election.objects.filter(start_date__lte=timezone.now(),
+                                        end_date__gte=timezone.now(),
+                                        voters=request.user,
+                                        participation__voted=False)
+
+    questionnaires = Questionnaire.objects.filter(start_date__lte=timezone.now(),
+                                                  end_date__gte=timezone.now(),
+                                                  voters=request.user,
+                                                  participation__voted=False)
+
+    context = {'active_elections': elections,
+               'active_questionnaires': questionnaires}
+
+    return render(request, 'elections/index.html', context)
+
+
 @login_required(login_url='/login')
-def detail(request, election_id):
+def election_detail(request, election_id):
     def reject_access():
         return Http404('Wskazane wybory nie istnieją lub nie masz do nich dostępu')
 
@@ -44,9 +61,9 @@ def detail(request, election_id):
         raise reject_access()
 
     if request.method == 'GET':
-        form = VoteForm(election=election)
+        form = ElectionVoteForm(election=election)
     else:
-        form = VoteForm(election=election, data=request.POST)
+        form = ElectionVoteForm(election=election, data=request.POST)
         if form.is_valid():
             participation.voted = True
             participation.save()
@@ -59,6 +76,46 @@ def detail(request, election_id):
     return render(request, 'elections/election_detail.html', {
         'form': form,
         'election': election
+    })
+
+
+@login_required(login_url='/login')
+def questionnaire_detail(request, election_id):
+    def reject_access():
+        return Http404('Wskazane głosowanie nie istnieje lub nie masz do niego dostępu')
+
+    try:
+        questionnaire = Questionnaire.objects.get(pk=election_id)
+    except Questionnaire.DoesNotExist:
+        raise reject_access()
+
+    if not questionnaire.is_active():
+        raise reject_access()
+
+    try:
+        participation = questionnaire.participation_set.get(voter=request.user)
+    except Participation.DoesNotExist:
+        raise reject_access()
+
+    if participation.voted:
+        raise reject_access()
+
+    if request.method == 'GET':
+        form = QuestionnaireVoteForm(questionnaire=questionnaire)
+    else:
+        form = QuestionnaireVoteForm(questionnaire=questionnaire, data=request.POST)
+        if form.is_valid():
+            participation.voted = True
+            participation.save()
+
+            answers = form.cleaned_data['answers']
+            questionnaire.answer_set.filter(id__in=answers).update(votes=F('votes') + 1)
+
+            return render(request, 'elections/successful_vote.html')
+
+    return render(request, 'elections/questionnaire_detail.html', {
+        'form': form,
+        'questionnaire': questionnaire
     })
 
 

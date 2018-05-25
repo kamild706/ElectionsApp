@@ -21,7 +21,7 @@
             <div class="profile">
                 <div>Witaj, {{ request.user.username }}!</div>
                 {% if request.user.is_staff %}
-                    <div><a href="admin/">Panel admina</a></div>
+                    <div><a href="/admin/">Panel admina</a></div>
                 {% endif %}
                 <div><a href="{% url 'elections:logout' %}">Wyloguj się</a></div>
             </div>

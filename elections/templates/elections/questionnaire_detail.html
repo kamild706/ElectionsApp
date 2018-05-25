@@ -1,0 +1,28 @@
+{% extends 'elections/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <h1>{{ questionnaire.description }}</h1>
+    {% if form.non_field_errors %}<p><strong>{{ form.non_field_errors }}</strong></p>{% endif %}
+    {% if form.errors %}<p><strong>{{ form.errors }}</strong></p>{% endif %}
+    <p>W tym pytaniu możesz zaznaczyć <span id="maxVotes">1</span> odpowiedź</p>
+    <form class="choiceForm" action="#" method="post" onsubmit="return validateForm();">
+        {% csrf_token %}
+        {% for answer in form.answers %}
+
+            <div class="choice answer">
+                <div>
+                    {{ answer.tag }}
+                    <label for="{{ answer.id_for_label }}">
+                        {{ answer.choice_label }}
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+
+        <input type="submit" class="green-button right-aligned" value="Zagłosuj">
+    </form>
+
+    <script src="{% static 'elections/electionDetails.js' %}"></script>
+{% endblock %}

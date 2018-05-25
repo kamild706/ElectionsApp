@@ -129,7 +129,7 @@ table {
 }
 
 .choice label {
-    margin-left: 50px;
+    /*margin-left: 50px;*/
 }
 
 .choiceForm {
@@ -157,4 +157,12 @@ table {
 
 .login-form div label {
     display: block;
+}
+
+.vertical-offset {
+    margin-top: 150px;
+}
+
+.answer {
+    width: 700px;
 }

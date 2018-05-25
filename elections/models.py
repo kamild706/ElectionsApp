@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 
+
 class Candidate(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -18,20 +19,23 @@ class Candidate(models.Model):
         verbose_name_plural = "Kandydaci"
 
 
-class Election(models.Model):
+class AbstractElection(models.Model):
     description = models.CharField(max_length=150)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    votes_per_voter = models.IntegerField(validators=[MinValueValidator(1)])
     voters = models.ManyToManyField(User, through='Participation')
+
+    def is_active(self):
+        return self.start_date <= timezone.now() <= self.end_date
+
+
+class Election(AbstractElection):
+    votes_per_voter = models.IntegerField(validators=[MinValueValidator(1)])
     candidates = models.ManyToManyField(Candidate, through='Candidacy')
 
     def candidates_number(self):
         return self.candidates.count()
     candidates_number.short_description = 'Number of candidates'
-
-    def is_active(self):
-        return self.start_date <= timezone.now() <= self.end_date
 
     def __str__(self):
         return self.description
@@ -42,7 +46,7 @@ class Election(models.Model):
 
 
 class Participation(models.Model):
-    election = models.ForeignKey(Election, on_delete=models.CASCADE)
+    election = models.ForeignKey(AbstractElection, on_delete=models.CASCADE)
     voter = models.ForeignKey(User, on_delete=models.CASCADE)
     voted = models.BooleanField(default=False)
 
@@ -63,3 +67,13 @@ class Candidacy(models.Model):
 
     def __str__(self):
         return str(self.election) + " " + str(self.candidate) + " " + str(self.votes)
+
+
+class Questionnaire(AbstractElection):
+    pass
+
+
+class Answer(models.Model):
+    text = models.CharField(max_length=100)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    votes = models.IntegerField(default=0)
