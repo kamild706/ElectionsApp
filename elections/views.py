@@ -23,18 +23,21 @@ class IndexView(generic.ListView):
 
 
 def index(request):
-    elections = Election.objects.filter(start_date__lte=timezone.now(),
-                                        end_date__gte=timezone.now(),
-                                        voters=request.user,
-                                        participation__voted=False)
+    if request.user.is_authenticated:
+        elections = Election.objects.filter(start_date__lte=timezone.now(),
+                                            end_date__gte=timezone.now(),
+                                            voters=request.user,
+                                            participation__voted=False)
 
-    questionnaires = Questionnaire.objects.filter(start_date__lte=timezone.now(),
-                                                  end_date__gte=timezone.now(),
-                                                  voters=request.user,
-                                                  participation__voted=False)
+        questionnaires = Questionnaire.objects.filter(start_date__lte=timezone.now(),
+                                                      end_date__gte=timezone.now(),
+                                                      voters=request.user,
+                                                      participation__voted=False)
 
-    context = {'active_elections': elections,
-               'active_questionnaires': questionnaires}
+        context = {'active_elections': elections,
+                   'active_questionnaires': questionnaires}
+    else:
+        context = None
 
     return render(request, 'elections/index.html', context)
 

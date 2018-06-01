@@ -25,6 +25,9 @@ class AbstractElection(models.Model):
     end_date = models.DateTimeField()
     voters = models.ManyToManyField(User, through='Participation')
 
+    def __str__(self):
+        return self.description
+
     def is_active(self):
         return self.start_date <= timezone.now() <= self.end_date
 
@@ -36,9 +39,6 @@ class Election(AbstractElection):
     def candidates_number(self):
         return self.candidates.count()
     candidates_number.short_description = 'Number of candidates'
-
-    def __str__(self):
-        return self.description
 
     class Meta:
         verbose_name = "Wybory"
@@ -70,7 +70,9 @@ class Candidacy(models.Model):
 
 
 class Questionnaire(AbstractElection):
-    pass
+    class Meta:
+        verbose_name = 'Referendum'
+        verbose_name_plural = 'Referenda'
 
 
 class Answer(models.Model):

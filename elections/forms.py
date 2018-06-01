@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 from elections.models import Candidate, Election, Answer
 
@@ -60,12 +61,12 @@ class QuestionnaireVoteForm(forms.Form):
 
         return cleaned_data
 
-        
+
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    first_name = forms.CharField(max_length=30, help_text='Opcjonalnie.', label='Imię')
+    last_name = forms.CharField(max_length=30, help_text='Opcjonalnie.', label='Nazwisko')
+    email = forms.EmailField(max_length=254, help_text='Wymagane. Podaj prawidłowy adres')
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)

@@ -6,7 +6,7 @@
     <h1>{{ questionnaire.description }}</h1>
     {% if form.non_field_errors %}<p><strong>{{ form.non_field_errors }}</strong></p>{% endif %}
     {% if form.errors %}<p><strong>{{ form.errors }}</strong></p>{% endif %}
-    <p>W tym pytaniu możesz zaznaczyć <span id="maxVotes">1</span> odpowiedź</p>
+    <p>W tym referendum możesz opowiedzieć się za <span id="maxVotes">1</span> odpowiedzią</p>
     <form class="choiceForm" action="#" method="post" onsubmit="return validateForm();">
         {% csrf_token %}
         {% for answer in form.answers %}
