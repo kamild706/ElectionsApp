@@ -1,0 +1,168 @@
+@font-face {
+    font-family: ProximaNova-Regular;
+    src: url("ProximaNova-Regular.otf") format("opentype");
+}
+
+body {
+    font-family: ProximaNova-Regular, sans-serif;
+    margin: 0;
+    background-color: white;
+}
+
+.left {
+    margin-top: 33px;
+    font-size: 25px;
+}
+
+.right {
+    margin-top: 20px;
+    float: right;
+}
+
+.profile {
+    float: right;
+    margin-top: 5px;
+}
+
+header {
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+    height: 100px;
+    background-color: #4A8ED3;
+}
+
+.left, .right {
+    display: inline-block;
+}
+
+main {
+    margin: 20px;
+}
+
+.alert {
+    padding: 8px 35px 8px 14px;
+    margin-bottom: 18px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background-color: #fcf8e3;
+    border: 3px solid #fbeed5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    color: #c09853;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    border-color: #FF6863;
+    color: #b94a48;
+}
+
+.alert-info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #3a87ad;
+}
+
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}
+
+.big-margin {
+    margin-top: 150px;
+}
+
+header div a {
+    color: white;
+    text-decoration: none;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.elections th {
+    text-align: left;
+}
+
+.elections td {
+    border-top: 1px solid grey;
+}
+
+.elections tr {
+    height: 30px;
+}
+
+.elections tbody tr:hover {
+    background-color: #cacdd1;
+}
+
+.elections .desc {
+    width: 450px;
+}
+
+.elections .date-start, .date-end {
+    width: 250px;
+}
+
+.choice:hover {
+    background-color: #cacdd1 !important;
+}
+
+.choice input {
+    visibility: hidden;
+}
+
+.choice {
+    width: 370px;
+    height: 44px;
+    border-top: 1px solid black;
+    display:flex;
+    align-items:center;
+}
+
+.choice div {
+    margin-left: 10px;
+}
+
+.choice label {
+    /*margin-left: 50px;*/
+}
+
+.choiceForm {
+    margin-top: 40px;
+}
+
+.green-button {
+    color: white;
+    width: 80px;
+    height: 38px;
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    border-radius: 3px;
+}
+
+.right-aligned {
+    margin-top: 20px;
+    margin-left: 290px;
+}
+
+.login-form div input {
+    display: block;
+    margin-bottom: 15px;
+}
+
+.login-form div label {
+    display: block;
+}
+
+.vertical-offset {
+    margin-top: 150px;
+}
+
+.answer {
+    width: 700px;
+}
