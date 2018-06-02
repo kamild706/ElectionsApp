@@ -3,23 +3,16 @@ from django.contrib.auth import authenticate, login
 from django.db.models import F
 from django.http import Http404
 from django.utils import timezone
-from django.views import generic
 from django.shortcuts import render, redirect
 
 from elections.forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
 from elections.models import Election, Participation, Questionnaire
 
+from operator import itemgetter
 
-class IndexView(generic.ListView):
-    template_name = 'elections/index.html'
-    context_object_name = 'active_elections'
 
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Election.objects.filter(start_date__lte=timezone.now(),
-                                           end_date__gte=timezone.now(),
-                                           voters=self.request.user,
-                                           participation__voted=False)
+def reject_access():
+    return Http404('Wskazana strona nie istnieje lub nie masz do niej dostępu')
 
 
 def index(request):
@@ -44,9 +37,6 @@ def index(request):
 
 @login_required(login_url='/login')
 def election_detail(request, election_id):
-    def reject_access():
-        return Http404('Wskazane wybory nie istnieją lub nie masz do nich dostępu')
-
     try:
         election = Election.objects.get(pk=election_id)
     except Election.DoesNotExist:
@@ -84,9 +74,6 @@ def election_detail(request, election_id):
 
 @login_required(login_url='/login')
 def questionnaire_detail(request, election_id):
-    def reject_access():
-        return Http404('Wskazane głosowanie nie istnieje lub nie masz do niego dostępu')
-
     try:
         questionnaire = Questionnaire.objects.get(pk=election_id)
     except Questionnaire.DoesNotExist:
@@ -135,3 +122,81 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'elections/signup.html', {'form': form})
+
+
+@login_required(login_url='/login')
+def show_election_report(request, election_id):
+    try:
+        election = Election.objects.get(pk=election_id)
+    except Election.DoesNotExist:
+        raise reject_access()
+
+    if not election.is_finished():
+        raise reject_access()
+
+    present_voters = election.participation_set.filter(voted=True).count()
+    all_voters = election.voters.count()
+    attendance = present_voters / all_voters * 100
+    candidacies = election.candidacy_set.all()
+    casted_votes = sum([e.votes for e in candidacies])
+
+    results = []
+    for c in candidacies:
+        result = {
+            'first_name': c.candidate.first_name,
+            'last_name': c.candidate.last_name,
+            'votes': c.votes,
+            'percent': c.votes / casted_votes * 100 if casted_votes > 0 else 0
+        }
+        results.append(result)
+
+    sorted_results = sorted(results, key=itemgetter('votes'), reverse=True)
+
+    context = {
+        'all_voters': all_voters,
+        'election': election,
+        'present_voters': present_voters,
+        'candidacies': sorted_results,
+        'casted_votes': casted_votes,
+        'attendance': attendance
+    }
+
+    return render(request, 'reports/election_report.html', context)
+
+
+def show_questionnaire_report(request, questionnaire_id):
+    try:
+        questionnaire = Questionnaire.objects.get(pk=questionnaire_id)
+    except Questionnaire.DoesNotExist:
+        raise reject_access()
+
+    if not questionnaire.is_finished():
+        raise reject_access()
+
+    present_voters = questionnaire.participation_set.filter(voted=True).count()
+    all_voters = questionnaire.voters.count()
+    attendance = present_voters / all_voters * 100
+    answers = questionnaire.answer_set.all()
+    casted_votes = sum([a.votes for a in answers])
+
+    results = []
+    for c in answers:
+        result = {
+            'text': c.text,
+            'votes': c.votes,
+            'percent': c.votes / casted_votes * 100 if casted_votes > 0 else 0
+        }
+        results.append(result)
+
+    sorted_results = sorted(results, key=itemgetter('votes'), reverse=True)
+
+    context = {
+        'all_voters': all_voters,
+        'questionnaire': questionnaire,
+        'present_voters': present_voters,
+        'answers': sorted_results,
+        'casted_votes': casted_votes,
+        'attendance': attendance
+    }
+
+    return render(request, 'reports/questionnaire_report.html', context)

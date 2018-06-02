@@ -31,6 +31,9 @@ class AbstractElection(models.Model):
     def is_active(self):
         return self.start_date <= timezone.now() <= self.end_date
 
+    def is_finished(self):
+        return self.end_date < timezone.now()
+
 
 class Election(AbstractElection):
     votes_per_voter = models.IntegerField(validators=[MinValueValidator(1)])

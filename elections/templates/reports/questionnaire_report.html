@@ -1,0 +1,104 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+
+    <title>Raport z głosowania!</title>
+</head>
+<body>
+<div class="container">
+    <h3>{{ questionnaire.description }}</h3>
+    <div class="date">
+        <div>
+            <h5>Data rozpoczęcia</h5>
+            <h6>{{ questionnaire.start_date }}</h6>
+        </div>
+
+        <div>
+            <h5>Data zakończenia</h5>
+            <h6>{{ questionnaire.end_date }}</h6>
+        </div>
+    </div>
+
+    <div class="stats">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <td>Uprawnionych do głosowania</td>
+                <td>{{ all_voters }}</td>
+            </tr>
+            <tr>
+                <td>Udział wzięło</td>
+                <td>{{ present_voters }}</td>
+            </tr>
+            <tr>
+                <td>Frekwencja</td>
+                <td>{{ attendance }}%</td>
+            </tr>
+            <tr>
+                <td>Oddanych głosów</td>
+                <td>{{ casted_votes }}</td>
+            </tr>
+            <tr>
+                <td>Liczba odpowiedzi</td>
+                <td>{{ answers|length }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="results">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Odpowiedź</th>
+                <th scope="col">Głosy</th>
+                <th scope="col">Procentowo</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for answer in answers %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ answer.text }}</td>
+                    <td>{{ answer.votes }}</td>
+                    <td>{{ answer.percent }}%</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="chart">
+    <canvas id="myChart"></canvas>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+<script src="{% static 'reports/questionnaire_report.js' %}"></script>
+</body>
+</html>

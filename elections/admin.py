@@ -34,18 +34,6 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = (ParticipationInline, AnswerInline)
 
 
-# class CandidacyAdmin(admin.ModelAdmin):
-#     list_display = ('candidate', 'election', 'votes')
-#     exclude = ('votes',)
-#
-#
-# class ParticipationAdmin(admin.ModelAdmin):
-#     list_display = ('voter', 'election', 'voted')
-#     # exclude = ('voted',)
-
-
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Election, ElectionAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
-# admin.site.register(Candidacy, CandidacyAdmin)
-# admin.site.register(Participation, ParticipationAdmin)
