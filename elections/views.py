@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.db.models import F
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
 
@@ -9,6 +9,7 @@ from elections.forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
 from elections.models import Election, Participation, Questionnaire
 
 from operator import itemgetter
+import pdfkit
 
 
 def reject_access():
@@ -124,7 +125,6 @@ def signup(request):
     return render(request, 'elections/signup.html', {'form': form})
 
 
-@login_required(login_url='/login')
 def show_election_report(request, election_id):
     try:
         election = Election.objects.get(pk=election_id)
@@ -200,3 +200,26 @@ def show_questionnaire_report(request, questionnaire_id):
     }
 
     return render(request, 'reports/questionnaire_report.html', context)
+
+
+@login_required(login_url='/login')
+def pdf_report(request, eid):
+    try:
+        obj = Questionnaire.objects.get(pk=eid)
+        my_url = "http://localhost:8000/questionnaire/"
+    except Questionnaire.DoesNotExist:
+        try:
+            obj = Election.objects.get(pk=eid)
+            my_url = "http://localhost:8000/election/"
+        except Election.DoesNotExist:
+            raise reject_access()
+
+    if not obj.is_finished():
+        raise reject_access()
+
+    my_url += str(eid) + "/raport"
+    pdf = pdfkit.from_url(my_url, False)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="raport.pdf"'
+
+    return response
