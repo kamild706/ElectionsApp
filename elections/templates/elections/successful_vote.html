@@ -3,6 +3,9 @@
 {% block content %}
     <div class="alert alert-success big-margin">
         <strong>Twój głos został uwzględniony</strong> Dziękujemy za udział w wyborach<br>
+        Gdy głosowanie się zakończy, raport z wynikami będzie dostępny pod następującym adresem:
+        <a href="{% url 'elections:showReport' eid %}">{{ request.META.HTTP_HOST }}{% url 'elections:showReport' eid %}</a>
+        <br>
         <a href="{% url 'elections:index' %}">Kliknij aby przejść do strony głównej</a>
     </div>
 {% endblock %}

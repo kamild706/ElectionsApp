@@ -65,7 +65,7 @@ def election_detail(request, election_id):
             candidates = form.cleaned_data['candidates']
             election.candidacy_set.filter(candidate_id__in=candidates).update(votes=F('votes') + 1)
 
-            return render(request, 'elections/successful_vote.html')
+            return render(request, 'elections/successful_vote.html', {'eid': election_id})
 
     return render(request, 'elections/election_detail.html', {
         'form': form,
@@ -102,7 +102,7 @@ def questionnaire_detail(request, election_id):
             answers = form.cleaned_data['answers']
             questionnaire.answer_set.filter(id__in=answers).update(votes=F('votes') + 1)
 
-            return render(request, 'elections/successful_vote.html')
+            return render(request, 'elections/successful_vote.html', {'eid': election_id})
 
     return render(request, 'elections/questionnaire_detail.html', {
         'form': form,
@@ -223,3 +223,16 @@ def pdf_report(request, eid):
     response['Content-Disposition'] = 'inline; filename="raport.pdf"'
 
     return response
+
+
+@login_required(login_url='/login')
+def show_report(request, pk):
+    try:
+        Questionnaire.objects.get(pk=pk)
+        return show_questionnaire_report(request, pk)
+    except Questionnaire.DoesNotExist:
+        try:
+            Election.objects.get(pk=pk)
+            return show_election_report(request, pk)
+        except Election.DoesNotExist:
+            raise reject_access()
