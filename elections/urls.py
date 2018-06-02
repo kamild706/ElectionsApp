@@ -12,5 +12,5 @@ urlpatterns = [
     path('election/<int:election_id>/raport/', views.show_election_report, name='electionReport'),
     path('questionnaire/<int:election_id>/', views.questionnaire_detail, name='questionnaireDetail'),
     path('questionnaire/<int:questionnaire_id>/raport/', views.show_questionnaire_report, name='questionnaireReport'),
-    path('raport/<int:eid>', views.pdf_report, name='pdfReport'),
+    # path('raport/<int:eid>', views.pdf_report, name='pdfReport'),
 ]
