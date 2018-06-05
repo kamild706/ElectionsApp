@@ -21,3 +21,4 @@ ElectionsApp.iml
 mysite_uwsgi.ini
 settings_secret.py
 mysite.sock
+uwsgi_params

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.db.models import F
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.utils import timezone
 from django.shortcuts import render, redirect
 
@@ -12,7 +12,6 @@ from elections.forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
 from elections.models import Election, Participation, Questionnaire
 
 from operator import itemgetter
-import pdfkit
 
 
 def reject_access():
@@ -45,7 +44,7 @@ def send_confirmation_email(user, election_id):
             'Potwierdzenie oddania głosu',
             'Twój głos został w wyborach został uwzględniony.\n'
             'Gdy wybory dobiegną końca, pod poniższym adresem dostępny '
-            'będzie raport wyborczy\nhttp://wybory.t32.pl/raport' + str(election_id),
+            'będzie raport wyborczy\nhttp://wybory.t32.pl/report/' + str(election_id),
             'Centrum Wyborcze <kamil@t32.pl>',
             [user.email],
             fail_silently=False,
@@ -225,29 +224,6 @@ def show_questionnaire_report(request, questionnaire_id):
     }
 
     return render(request, 'reports/questionnaire_report.html', context)
-
-
-@login_required(login_url='/login')
-def pdf_report(request, eid):
-    try:
-        obj = Questionnaire.objects.get(pk=eid)
-        my_url = "http://localhost:8000/questionnaire/"
-    except Questionnaire.DoesNotExist:
-        try:
-            obj = Election.objects.get(pk=eid)
-            my_url = "http://localhost:8000/election/"
-        except Election.DoesNotExist:
-            raise reject_access()
-
-    if not obj.is_finished():
-        raise reject_access()
-
-    my_url += str(eid) + "/raport"
-    pdf = pdfkit.from_url(my_url, False)
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="raport.pdf"'
-
-    return response
 
 
 @login_required(login_url='/login')
