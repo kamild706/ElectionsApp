@@ -19,3 +19,5 @@ ElectionsApp.iml
 # End of https://www.gitignore.io/api/django
 
 mysite_uwsgi.ini
+settings_secret.py
+mysite.sock

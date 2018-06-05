@@ -26,8 +26,13 @@ function validateForm() {
             selectedCandidates++;
     });
 
+    if (selectedCandidates === 0) {
+        alert("Musisz wybrać conajmniej 1 pozycję");
+        return false;
+    }
+
     if (selectedCandidates > maxVotes) {
-        alert("Wybrales zbyt wielu kandydatow");
+        alert("Wybrales zbyt wiele odpowiedzi");
         return false;
     }
     return true;

@@ -1,5 +1,8 @@
+from smtplib import SMTPException
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
 from django.db.models import F
 from django.http import Http404, HttpResponse
 from django.utils import timezone
@@ -36,6 +39,22 @@ def index(request):
     return render(request, 'elections/index.html', context)
 
 
+def send_confirmation_email(user, election_id):
+    try:
+        send_mail(
+            'Potwierdzenie oddania głosu',
+            'Twój głos został w wyborach został uwzględniony.\n'
+            'Gdy wybory dobiegną końca, pod poniższym adresem dostępny '
+            'będzie raport wyborczy\nhttp://wybory.t32.pl/raport' + str(election_id),
+            'Centrum Wyborcze <kamil@t32.pl>',
+            [user.email],
+            fail_silently=False,
+        )
+        return True
+    except SMTPException:
+        return False
+
+
 @login_required(login_url='/login')
 def election_detail(request, election_id):
     try:
@@ -65,7 +84,10 @@ def election_detail(request, election_id):
             candidates = form.cleaned_data['candidates']
             election.candidacy_set.filter(candidate_id__in=candidates).update(votes=F('votes') + 1)
 
-            return render(request, 'elections/successful_vote.html', {'eid': election_id})
+            sent = send_confirmation_email(request.user, election_id)
+
+            return render(request, 'elections/successful_vote.html', {'eid': election_id,
+                                                                      'email_sent': sent})
 
     return render(request, 'elections/election_detail.html', {
         'form': form,
@@ -102,7 +124,10 @@ def questionnaire_detail(request, election_id):
             answers = form.cleaned_data['answers']
             questionnaire.answer_set.filter(id__in=answers).update(votes=F('votes') + 1)
 
-            return render(request, 'elections/successful_vote.html', {'eid': election_id})
+            sent = send_confirmation_email(request.user, election_id)
+
+            return render(request, 'elections/successful_vote.html', {'eid': election_id,
+                                                                      'email_sent': sent})
 
     return render(request, 'elections/questionnaire_detail.html', {
         'form': form,
