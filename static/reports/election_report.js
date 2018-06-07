@@ -8,7 +8,7 @@ function getRandomColor() {
 }
 
 const ctx = document.getElementById("myChart").getContext('2d');
-Chart.defaults.global.animation.duration = 0;
+// Chart.defaults.global.animation.duration = 0;
 
 myLabels = [];
 myData = [];

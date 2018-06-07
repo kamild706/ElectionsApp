@@ -42,7 +42,7 @@ def send_confirmation_email(user, election_id):
     try:
         send_mail(
             'Potwierdzenie oddania głosu',
-            'Twój głos został w wyborach został uwzględniony.\n'
+            'Twój głos w wyborach został uwzględniony.\n'
             'Gdy wybory dobiegną końca, pod poniższym adresem dostępny '
             'będzie raport wyborczy\nhttp://wybory.t32.pl/report/' + str(election_id),
             'Centrum Wyborcze <kamil@t32.pl>',
