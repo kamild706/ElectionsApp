@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <h1>{{ election.description }}</h1>
+    <h2>{{ election.description }}</h2>
     {% if form.non_field_errors %}<p><strong>{{ form.non_field_errors }}</strong></p>{% endif %}
     {% if form.errors %}<p><strong>{{ form.errors }}</strong></p>{% endif %}
     <p>W tych wyborach możesz poprzeć <span id="maxVotes">{{ election.votes_per_voter }}</span> kandydatów</p>
