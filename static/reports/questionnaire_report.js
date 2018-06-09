@@ -7,6 +7,12 @@ function getRandomColor() {
     return color;
 }
 
+let counter = 0;
+colors = ['#129CFF', '#FFAA00', '#07CC39', '#7C2A99', '#544599', '#998336'];
+function getNextColor() {
+    return colors[counter++];
+}
+
 const ctx = document.getElementById("myChart").getContext('2d');
 // Chart.defaults.global.animation.duration = 0;
 
@@ -16,7 +22,7 @@ myBackgroundColor = [];
 $('.results tbody tr').each(function() {
     myLabels.push(this.cells[1].innerHTML);
     myData.push(Number(this.cells[3].innerHTML.replace(',', '.').replace('%', '')));
-    myBackgroundColor.push(getRandomColor());
+    myBackgroundColor.push(getNextColor());
 });
 
 data = {

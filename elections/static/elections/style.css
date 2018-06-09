@@ -166,3 +166,26 @@ table {
 .answer {
     width: 700px;
 }
+
+.register-button {
+    width: 120px;
+    height: 45px;
+}
+
+#id_captcha_1 {
+    display: block;
+    margin-top: -40px;
+}
+
+.captcha {
+    margin-left: 215px;
+}
+
+.login-form input {
+    width: 200px;
+    height: 40px;
+    padding: 15px;
+    box-sizing: border-box;
+    border: thin solid #ccc;
+    border-radius: 5px;
+}

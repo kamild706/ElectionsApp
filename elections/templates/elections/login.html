@@ -22,7 +22,7 @@
                 {{ form.password }}
             </div>
     
-            <input type="submit" class="green-button" value="login"/>
+            <button type="submit" class="green-button">login</button>
             <input type="hidden" name="next" value="{% url 'elections:index' %}"/>
         </form>
         <a href="{% url 'elections:signup' %}">Kliknij aby się zarejestrować</a>

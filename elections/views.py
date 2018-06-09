@@ -1,17 +1,15 @@
-from smtplib import SMTPException
+from operator import itemgetter
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import Http404
-from django.utils import timezone
 from django.shortcuts import render, redirect
+from django.utils import timezone
 
-from elections.forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
-from elections.models import Election, Participation, Questionnaire
-
-from operator import itemgetter
+from .forms import ElectionVoteForm, SignUpForm, QuestionnaireVoteForm
+from .models import Election, Participation, Questionnaire
+from .email import *
 
 
 def reject_access():
@@ -36,22 +34,6 @@ def index(request):
         context = None
 
     return render(request, 'elections/index.html', context)
-
-
-def send_confirmation_email(user, election_id):
-    try:
-        send_mail(
-            'Potwierdzenie oddania głosu',
-            'Twój głos w wyborach został uwzględniony.\n'
-            'Gdy wybory dobiegną końca, pod poniższym adresem dostępny '
-            'będzie raport wyborczy\nhttp://wybory.t32.pl/report/' + str(election_id),
-            'Centrum Wyborcze <kamil@t32.pl>',
-            [user.email],
-            fail_silently=False,
-        )
-        return True
-    except SMTPException:
-        return False
 
 
 @login_required(login_url='/login')
@@ -142,6 +124,7 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
+            send_registration_email(user)
             login(request, user)
             return redirect('/')
     else:
@@ -160,7 +143,7 @@ def show_election_report(request, election_id):
 
     present_voters = election.participation_set.filter(voted=True).count()
     all_voters = election.voters.count()
-    attendance = present_voters / all_voters * 100
+    attendance = round(present_voters / all_voters * 100, 2)
     candidacies = election.candidacy_set.all()
     casted_votes = sum([e.votes for e in candidacies])
 
@@ -170,7 +153,7 @@ def show_election_report(request, election_id):
             'first_name': c.candidate.first_name,
             'last_name': c.candidate.last_name,
             'votes': c.votes,
-            'percent': c.votes / casted_votes * 100 if casted_votes > 0 else 0
+            'percent': round(c.votes / casted_votes * 100 if casted_votes > 0 else 0, 2)
         }
         results.append(result)
 
@@ -199,7 +182,7 @@ def show_questionnaire_report(request, questionnaire_id):
 
     present_voters = questionnaire.participation_set.filter(voted=True).count()
     all_voters = questionnaire.voters.count()
-    attendance = present_voters / all_voters * 100
+    attendance = round(present_voters / all_voters * 100, 2)
     answers = questionnaire.answer_set.all()
     casted_votes = sum([a.votes for a in answers])
 
@@ -208,7 +191,7 @@ def show_questionnaire_report(request, questionnaire_id):
         result = {
             'text': c.text,
             'votes': c.votes,
-            'percent': c.votes / casted_votes * 100 if casted_votes > 0 else 0
+            'percent': round(c.votes / casted_votes * 100 if casted_votes > 0 else 0, 2)
         }
         results.append(result)
 

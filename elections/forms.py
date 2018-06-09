@@ -1,3 +1,4 @@
+from captcha.fields import CaptchaField
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -67,6 +68,7 @@ class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, help_text='Wymagane. Wprowadź imię.', label='Imię')
     last_name = forms.CharField(max_length=30, help_text='Wymagane. Wprowadź nazwisko.', label='Nazwisko')
     email = forms.EmailField(max_length=254, help_text='Wymagane. Podaj prawidłowy adres')
+    captcha = CaptchaField()
 
     class Meta:
         model = User
